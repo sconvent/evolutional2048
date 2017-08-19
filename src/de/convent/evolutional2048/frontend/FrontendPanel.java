@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class FrontendPanel extends JPanel
@@ -83,7 +84,9 @@ public class FrontendPanel extends JPanel
 				repaint();
 			}
 		};
-		setUserInputEnabled(true);
+		JButton loadButton = new JButton("Load");
+		add(loadButton);
+		setKeyboardInputEnabled(true);
 		resetGame();
 	}
 
@@ -327,7 +330,7 @@ public class FrontendPanel extends JPanel
 	{
 		super.paint(g);
 		g.setColor(BG_COLOR);
-		g.fillRect(0, 0, this.getSize().width, this.getSize().height);
+		g.fillRect(0, 0, this.getSize().width, this.getSize().height - 100);
 		for(int y = 0; y < 4; y++)
 		{
 			for(int x = 0; x < 4; x++)
@@ -393,7 +396,7 @@ public class FrontendPanel extends JPanel
 		return arg * (TILES_MARGIN + TILE_SIZE) + TILES_MARGIN;
 	}
 
-	public void setUserInputEnabled(boolean enabled)
+	public void setKeyboardInputEnabled(boolean enabled)
 	{
 		if(enabled)
 			addKeyListener(keyAdapter);
@@ -407,6 +410,7 @@ public class FrontendPanel extends JPanel
 		{
 			myTiles[i].setValue(tiles[i]);
 		}
+		repaint();
 	}
 
 	static class Tile

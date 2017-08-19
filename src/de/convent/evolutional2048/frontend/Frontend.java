@@ -13,7 +13,7 @@ public class Frontend extends JPanel
 		JFrame frontendFrame = new JFrame();
 		frontendFrame.setTitle("evolutional2048");
 		frontendFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frontendFrame.setSize(340, 400);
+		frontendFrame.setSize(340, 500);
 		frontendFrame.setResizable(false);
 		frontendFrame.add(new FrontendPanel());
 		frontendFrame.setLocationRelativeTo(null);
