@@ -5,12 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import Jama.Matrix;
 import de.convent.evolutional2048.neuralNetwork.activationFunctions.ActivationFunction;
+import de.convent.evolutional2048.neuralNetwork.activationFunctions.StepFunction;
 import de.convent.evolutional2048.util.Direction;
 
-public class NeuralNetwork
+public class NeuralNetwork implements Serializable
 {
 	Matrix[] weights;
 	ActivationFunction activationFunction;
@@ -20,13 +22,14 @@ public class NeuralNetwork
 		weights = new Matrix[layerSizes.length - 1];
 		for(int i = 0; i < layerSizes.length - 1; i++)
 		{
-			weights[i] = Matrix.random(layerSizes[i], layerSizes[i + 1]);
+			weights[i] = Matrix.random(layerSizes[i + 1], layerSizes[i]);
 		}
 	}
 
 	public NeuralNetwork(String path)
 	{
 		load(path);
+		activationFunction = new StepFunction();
 	}
 
 	public Direction calculate(Matrix input)
@@ -37,11 +40,11 @@ public class NeuralNetwork
 			current = weights[i].times(current);
 		}
 		int maxIndex = 0;
-		if(current.getArray()[0][1] > current.getArray()[0][maxIndex])
+		if(current.getArray()[1][0] > current.getArray()[maxIndex][0])
 			maxIndex = 1;
-		if(current.getArray()[0][2] > current.getArray()[0][maxIndex])
+		if(current.getArray()[2][0] > current.getArray()[maxIndex][0])
 			maxIndex = 2;
-		if(current.getArray()[0][3] > current.getArray()[0][maxIndex])
+		if(current.getArray()[3][0] > current.getArray()[maxIndex][0])
 			maxIndex = 3;
 
 		if(maxIndex == 0)

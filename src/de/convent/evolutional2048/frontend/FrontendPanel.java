@@ -17,14 +17,22 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+
+import de.convent.evolutional2048.backend.EvolutionPlayer;
+import de.convent.evolutional2048.backend.Game;
 
 public class FrontendPanel extends JPanel
 {
@@ -38,6 +46,8 @@ public class FrontendPanel extends JPanel
 	boolean myLose = false;
 	int myScore = 0;
 	KeyAdapter keyAdapter;
+	EvolutionPlayer evolutionPlayer;
+	boolean running;
 
 	public FrontendPanel()
 	{
@@ -84,8 +94,63 @@ public class FrontendPanel extends JPanel
 				repaint();
 			}
 		};
+		add(Box.createVerticalStrut(770));
+		JButton selectButton = new JButton("Select");
+		JFileChooser fileChooser = new JFileChooser();
+		final java.awt.Component c = this;
+		selectButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				fileChooser.showOpenDialog(c);
+			}
+		});
+		add(selectButton);
 		JButton loadButton = new JButton("Load");
 		add(loadButton);
+		loadButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				evolutionPlayer = new EvolutionPlayer(fileChooser.getSelectedFile().getAbsolutePath());
+			}
+		});
+		JButton runButton = new JButton("Run");
+		add(runButton);
+		running = false;
+		runButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						running = true;
+						Game game = new Game();
+						while (running)
+						{
+							game.move(evolutionPlayer.move(game.getTiles()));
+							setTiles(game.getTiles());
+
+							try
+							{
+								TimeUnit.SECONDS.sleep(1);
+							}
+							catch (InterruptedException e1)
+							{
+								e1.printStackTrace();
+							}
+						}
+					}
+				}).start();
+
+			}
+		});
 		setKeyboardInputEnabled(true);
 		resetGame();
 	}

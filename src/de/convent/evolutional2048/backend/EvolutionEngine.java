@@ -62,4 +62,14 @@ public class EvolutionEngine
 			return;
 		}
 	}
+
+	public void saveOne(String path)
+	{
+		neuralNetwork[1].save(path);
+	}
+
+	public NeuralNetwork[] getNeuralNetwork()
+	{
+		return neuralNetwork;
+	}
 }

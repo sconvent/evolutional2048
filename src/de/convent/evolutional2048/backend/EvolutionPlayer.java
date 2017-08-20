@@ -18,6 +18,6 @@ public class EvolutionPlayer
 		double[] tmp = new double[input.length];
 		for(int i = 0; i < input.length; i++)
 			tmp[i] = input[i];
-		return neuralNetwork.calculate(new Matrix(tmp, 1));
+		return neuralNetwork.calculate(new Matrix(tmp, 16));
 	}
 }
