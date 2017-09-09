@@ -95,4 +95,16 @@ public class NeuralNetwork implements Serializable
 			return;
 		}
 	}
+	
+	public void print()
+	{
+		for(int i = 0; i < weights[0].getArray().length; i++)
+		{
+			for(int j = 0; j < weights[0].getArray()[i].length; j++)
+			{
+				System.out.print(weights[0].getArray()[i][j] + " ");
+			}
+			System.out.println("");
+		}
+	}
 }
