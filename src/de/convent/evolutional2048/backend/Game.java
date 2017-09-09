@@ -94,7 +94,26 @@ public class Game
 
 	private int merge(int i0, int i1, int i2, int i3)
 	{
-		if(tiles[i0] == tiles[i1] && tiles[i2] == tiles[i3])
+		if(tiles[i2] == 0)
+		{
+			tiles[i2] = tiles[i3];
+			tiles[i3] = 0;
+		}
+		if(tiles[i1] == 0)
+		{
+			tiles[i1] = tiles[i2];
+			tiles[i2] = tiles[i3];
+			tiles[i3] = 0;
+		}
+		if(tiles[i0] == 0)
+		{
+			tiles[i0] = tiles[i1];
+			tiles[i1] = tiles[i2];
+			tiles[i2] = tiles[i3];
+			tiles[i3] = 0;
+		}
+		
+		if(tiles[i0] == tiles[i1] && tiles[i2] == tiles[i3] && tiles[i0] != 0  && tiles[i2] != 0)
 		{
 			tiles[i0] = 2 * tiles[i0];
 			tiles[i1] = 2 * tiles[i2];
@@ -102,7 +121,7 @@ public class Game
 			tiles[i3] = 0;
 			return 2;
 		}
-		if(tiles[i0] == tiles[i1])
+		if(tiles[i0] == tiles[i1] && tiles[i0] != 0)
 		{
 			tiles[i0] = 2 * tiles[i0];
 			tiles[i1] = tiles[i2];
@@ -110,14 +129,14 @@ public class Game
 			tiles[i3] = 0;
 			return 1;
 		}
-		if(tiles[i1] == tiles[i2])
+		if(tiles[i1] == tiles[i2] && tiles[i1] != 0)
 		{
 			tiles[i1] = 2 * tiles[i1];
 			tiles[i2] = tiles[i3];
 			tiles[i3] = 0;
 			return 1;
 		}
-		if(tiles[i2] == tiles[i3])
+		if(tiles[i2] == tiles[i3] && tiles[i2] != 0)
 		{
 			tiles[i2] = 2 * tiles[i2];
 			return 1;
