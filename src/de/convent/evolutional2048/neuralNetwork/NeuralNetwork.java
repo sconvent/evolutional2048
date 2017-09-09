@@ -66,7 +66,7 @@ public class NeuralNetwork implements Serializable
 			out.writeObject(weights);
 			out.close();
 			fileOut.close();
-			System.out.printf("Serialized data is saved in " + path);
+			System.out.println("Serialized data is saved in " + path);
 		}
 		catch (IOException e)
 		{

@@ -33,7 +33,7 @@ public class EvolutionEngine
 			out.writeObject(neuralNetwork);
 			out.close();
 			fileOut.close();
-			System.out.printf("Serialized data is saved in " + path);
+			System.out.println("Serialized data is saved in " + path);
 		}
 		catch (IOException e)
 		{
