@@ -27,6 +27,7 @@ public class Game
 				count++;
 		}
 		int index = (int) (Math.random() * count);
+		index++;
 		count = 0;
 		for(int i = 0; i < 16; i++)
 		{
