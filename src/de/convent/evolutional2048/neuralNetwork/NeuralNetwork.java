@@ -36,9 +36,11 @@ public class NeuralNetwork implements Serializable
 	public Direction calculate(Matrix input)
 	{
 		Matrix current = input;
+		ActivationFunction activationFunction = new StepFunction();
 		for(int i = 0; i < weights.length; i++)
 		{
 			current = weights[i].times(current);
+			current = activationFunction.function(current);
 		}
 		int maxIndex = 0;
 		if(current.getArray()[1][0] > current.getArray()[maxIndex][0])
@@ -50,9 +52,9 @@ public class NeuralNetwork implements Serializable
 
 		if(maxIndex == 0)
 			return Direction.UP;
-		else if(maxIndex == 0)
+		else if(maxIndex == 1)
 			return Direction.RIGHT;
-		else if(maxIndex == 0)
+		else if(maxIndex == 2)
 			return Direction.DOWN;
 		else
 			return Direction.LEFT;
