@@ -135,7 +135,7 @@ public class FrontendPanel extends JPanel
 						while (running)
 						{
 							game.move(evolutionPlayer.move(game.getTiles()));
-							setTiles(game.getTiles());
+							setTilesAndScore(game.getTiles(), game.getScore());
 
 							try
 							{
@@ -469,12 +469,13 @@ public class FrontendPanel extends JPanel
 			removeKeyListener(keyAdapter);
 	}
 
-	public void setTiles(int[] tiles)
+	public void setTilesAndScore(int[] tiles, int score)
 	{
 		for(int i = 0; i < 16; i++)
 		{
 			myTiles[i].setValue(tiles[i]);
 		}
+		myScore = score;
 		repaint();
 	}
 
