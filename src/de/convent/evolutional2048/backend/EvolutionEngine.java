@@ -6,22 +6,45 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import Jama.Matrix;
 import de.convent.evolutional2048.neuralNetwork.NeuralNetwork;
 
 public class EvolutionEngine
 {
-	NeuralNetwork[] neuralNetwork;
+	NeuralNetwork[] neuralNetworks;
+	int[] averageScores;
 
 	public EvolutionEngine()
 	{
-		neuralNetwork = new NeuralNetwork[100];
+		neuralNetworks = new NeuralNetwork[100];
+		averageScores = new int[100];
 		for(int i = 0; i < 100; i++)
-			neuralNetwork[i] = new NeuralNetwork(new int[] { 16, 16, 4 });
+		{
+			neuralNetworks[i] = new NeuralNetwork(new int[] { 16, 16, 4 });
+			averageScores[i] = 0;
+		}
 	}
 
 	public void train()
 	{
-
+		//for now: only calculate average scores of nns
+		for(int i = 0; i < 100; i++)
+		{
+			int totalScore = 0;
+			for(int j = 0; j < 100; j++)
+			{
+				Game game = new Game();
+				while(!game.hasGameEnded())
+				{
+					double[] tmp = new double[game.getTiles().length];
+					for(int k = 0; k < game.getTiles().length; k++)
+						tmp[k] = game.getTiles()[k];
+					game.move(neuralNetworks[i].calculate(new Matrix(tmp, 16)));
+				}
+				totalScore += game.getScore();
+			}
+			averageScores[i] = totalScore/100;
+		}
 	}
 
 	public void save(String path)
@@ -30,7 +53,7 @@ public class EvolutionEngine
 		{
 			FileOutputStream fileOut = new FileOutputStream(path);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(neuralNetwork);
+			out.writeObject(neuralNetworks);
 			out.close();
 			fileOut.close();
 			System.out.println("Serialized data is saved in " + path);
@@ -47,7 +70,7 @@ public class EvolutionEngine
 		{
 			FileInputStream fileIn = new FileInputStream(path);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			neuralNetwork = (NeuralNetwork[]) in.readObject();
+			neuralNetworks = (NeuralNetwork[]) in.readObject();
 			in.close();
 			fileIn.close();
 		}
@@ -63,13 +86,17 @@ public class EvolutionEngine
 		}
 	}
 
-	public void saveOne(String path)
+	public void saveBest(String path)
 	{
-		neuralNetwork[1].save(path);
+		int index = 0;
+		for(int i = 0; i < neuralNetworks.length; i++)
+			if(averageScores[i] > averageScores[index])
+				index = i;
+		neuralNetworks[index].save(path);
 	}
 
 	public NeuralNetwork[] getNeuralNetwork()
 	{
-		return neuralNetwork;
+		return neuralNetworks;
 	}
 }

@@ -13,7 +13,8 @@ public class Evolutional2048Application
 			if(args[0].equals("evolution"))
 			{
 				EvolutionEngine engine = new EvolutionEngine();
-				engine.saveOne(args[1]);
+				engine.train();
+				engine.saveBest(args[1]);
 			}
 			else if(args[0].equals("print"))
 			{
