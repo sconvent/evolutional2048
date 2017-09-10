@@ -5,7 +5,6 @@ import de.convent.evolutional2048.util.Direction;
 public class Game
 {
 	int[] tiles;
-	int nonZeroTiles;
 
 	public Game()
 	{
@@ -48,49 +47,54 @@ public class Game
 
 	public boolean hasGameEnded()
 	{
-		if(nonZeroTiles == 16)
+		int count = 0;
+		for(int i = 0; i < 16; i++)
 		{
-			// TODO: fix
-			return true;
+			if(tiles[i] != 0)
+				count++;
 		}
+		
+		if(count == 16)
+			return true; // TODO: fix
 		else
 			return false;
 	}
 
 	public int move(Direction direction)
 	{
+		int score = 0;
 		// merge
 		if(direction == Direction.UP) // up
 		{
-			merge(0, 4, 8, 12);
-			merge(1, 5, 9, 13);
-			merge(2, 6, 10, 14);
-			merge(3, 7, 11, 15);
+			score += merge(0, 4, 8, 12);
+			score += merge(1, 5, 9, 13);
+			score += merge(2, 6, 10, 14);
+			score += merge(3, 7, 11, 15);
 		}
 		else if(direction == Direction.RIGHT) // right
 		{
-			merge(3, 2, 1, 0);
-			merge(7, 6, 5, 4);
-			merge(11, 10, 9, 8);
-			merge(15, 14, 13, 12);
+			score += merge(3, 2, 1, 0);
+			score += merge(7, 6, 5, 4);
+			score += merge(11, 10, 9, 8);
+			score += merge(15, 14, 13, 12);
 		}
 		else if(direction == Direction.DOWN) // down
 		{
-			merge(12, 8, 4, 0);
-			merge(13, 9, 5, 1);
-			merge(14, 10, 6, 2);
-			merge(15, 11, 7, 3);
+			score += merge(12, 8, 4, 0);
+			score += merge(13, 9, 5, 1);
+			score += merge(14, 10, 6, 2);
+			score += merge(15, 11, 7, 3);
 		}
 		else if(direction == Direction.LEFT) // left
 		{
-			merge(0, 1, 2, 3);
-			merge(4, 5, 6, 7);
-			merge(8, 9, 10, 11);
-			merge(12, 13, 14, 15);
+			score += merge(0, 1, 2, 3);
+			score += merge(4, 5, 6, 7);
+			score += merge(8, 9, 10, 11);
+			score += merge(12, 13, 14, 15);
 		}
 
-		addRandom();
-		return 0;
+		addRandom(); //TODO: fix: only addRandom when something changed
+		return score;
 	}
 
 	private int merge(int i0, int i1, int i2, int i3)
@@ -114,34 +118,36 @@ public class Game
 			tiles[i3] = 0;
 		}
 		
+		int score = 0;		
 		if(tiles[i0] == tiles[i1] && tiles[i2] == tiles[i3] && tiles[i0] != 0  && tiles[i2] != 0)
 		{
 			tiles[i0] = 2 * tiles[i0];
+			score += tiles[i0];
 			tiles[i1] = 2 * tiles[i2];
+			score += tiles[i1];
 			tiles[i2] = 0;
 			tiles[i3] = 0;
-			return 2;
 		}
-		if(tiles[i0] == tiles[i1] && tiles[i0] != 0)
+		else if(tiles[i0] == tiles[i1] && tiles[i0] != 0)
 		{
 			tiles[i0] = 2 * tiles[i0];
+			score += tiles[i0];
 			tiles[i1] = tiles[i2];
 			tiles[i2] = tiles[i3];
 			tiles[i3] = 0;
-			return 1;
 		}
-		if(tiles[i1] == tiles[i2] && tiles[i1] != 0)
+		else if(tiles[i1] == tiles[i2] && tiles[i1] != 0)
 		{
 			tiles[i1] = 2 * tiles[i1];
+			score += tiles[i1];
 			tiles[i2] = tiles[i3];
 			tiles[i3] = 0;
-			return 1;
 		}
-		if(tiles[i2] == tiles[i3] && tiles[i2] != 0)
+		else if(tiles[i2] == tiles[i3] && tiles[i2] != 0)
 		{
 			tiles[i2] = 2 * tiles[i2];
-			return 1;
+			score += tiles[i2];
 		}
-		return 0;
+		return score;
 	}
 }
