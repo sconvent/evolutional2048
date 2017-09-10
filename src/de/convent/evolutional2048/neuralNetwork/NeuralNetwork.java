@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 import Jama.Matrix;
 import de.convent.evolutional2048.neuralNetwork.activationFunctions.ActivationFunction;
@@ -98,11 +99,16 @@ public class NeuralNetwork implements Serializable
 	
 	public void print()
 	{
-		for(int i = 0; i < weights[0].getArray().length; i++)
+		DecimalFormat format = new DecimalFormat("#0.00");
+		for(int n = 0; n < weights.length; n++)
 		{
-			for(int j = 0; j < weights[0].getArray()[i].length; j++)
+			for(int i = 0; i < weights[n].getArray().length; i++)
 			{
-				System.out.print(weights[0].getArray()[i][j] + " ");
+				for(int j = 0; j < weights[n].getArray()[i].length; j++)
+				{
+					System.out.print(format.format(weights[n].getArray()[i][j]) + " ");
+				}
+				System.out.println("");
 			}
 			System.out.println("");
 		}
