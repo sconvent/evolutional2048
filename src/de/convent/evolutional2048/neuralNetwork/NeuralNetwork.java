@@ -16,10 +16,12 @@ import de.convent.evolutional2048.util.Direction;
 public class NeuralNetwork implements Serializable
 {
 	Matrix[] weights;
+	int[] layerSizes;
 	ActivationFunction activationFunction;
 
-	public NeuralNetwork(int[] layerSizes)
+	public NeuralNetwork(int[] layerSizesInput)
 	{
+		layerSizes = layerSizesInput;
 		weights = new Matrix[layerSizes.length - 1];
 		for(int i = 0; i < layerSizes.length - 1; i++)
 		{
@@ -31,6 +33,16 @@ public class NeuralNetwork implements Serializable
 	{
 		load(path);
 		activationFunction = new StepFunction();
+	}
+	
+	public int[] getLayerSizes()
+	{
+		return layerSizes;
+	}
+	
+	public Matrix[] getWeights()
+	{
+		return weights;
 	}
 
 	public Direction calculate(Matrix input)
@@ -114,5 +126,21 @@ public class NeuralNetwork implements Serializable
 			}
 			System.out.println("");
 		}
+	}
+	
+	public static NeuralNetwork merge(NeuralNetwork nn1, NeuralNetwork nn2, double factor)
+	{
+		NeuralNetwork res = new NeuralNetwork(nn1.getLayerSizes());
+		for(int i = 0; i < res.getWeights().length; i++)
+		{
+			for(int j = 0; j < res.getWeights().length; j++)
+			{
+				for(int k = 0; k < res.getWeights().length; k++)
+				{
+					res.getWeights()[i].getArray()[j][k] = nn1.getWeights()[i].getArray()[j][k]*factor + nn2.getWeights()[i].getArray()[j][k]*(1-factor);
+				}
+			}
+		}
+		return res;
 	}
 }

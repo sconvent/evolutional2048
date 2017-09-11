@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import Jama.Matrix;
 import de.convent.evolutional2048.neuralNetwork.NeuralNetwork;
@@ -45,6 +47,28 @@ public class EvolutionEngine
 			}
 			averageScores[i] = totalScore/100;
 		}
+		
+		for(int evolution = 0; evolution < 10; evolution++)
+		{
+			
+		}
+	}
+	
+	public List<NeuralNetwork> spawn(NeuralNetwork parent1, NeuralNetwork parent2)
+	{
+		List<NeuralNetwork> res = new ArrayList<>();
+		res.add(NeuralNetwork.merge(parent1, parent2, 0));
+		res.add(NeuralNetwork.merge(parent1, parent2, .1));
+		res.add(NeuralNetwork.merge(parent1, parent2, .2));
+		res.add(NeuralNetwork.merge(parent1, parent2, .3));
+		res.add(NeuralNetwork.merge(parent1, parent2, .4));
+		res.add(NeuralNetwork.merge(parent1, parent2, .5));
+		res.add(NeuralNetwork.merge(parent1, parent2, .6));
+		res.add(NeuralNetwork.merge(parent1, parent2, .7));
+		res.add(NeuralNetwork.merge(parent1, parent2, .8));
+		res.add(NeuralNetwork.merge(parent1, parent2, .9));
+		res.add(NeuralNetwork.merge(parent1, parent2, 1));
+		return res;
 	}
 
 	public void save(String path)
