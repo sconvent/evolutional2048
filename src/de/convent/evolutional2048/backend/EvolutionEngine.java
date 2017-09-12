@@ -29,32 +29,37 @@ public class EvolutionEngine
 
 	public void train()
 	{
-		//for now: only calculate average scores of nns
-		for(int i = 0; i < 100; i++)
-		{
-			int totalScore = 0;
-			for(int j = 0; j < 100; j++)
-			{
-				Game game = new Game();
-				while(!game.hasGameEnded())
-				{
-					double[] tmp = new double[game.getTiles().length];
-					for(int k = 0; k < game.getTiles().length; k++)
-						tmp[k] = game.getTiles()[k];
-					game.move(neuralNetworks[i].calculate(new Matrix(tmp, 16)));
-				}
-				totalScore += game.getScore();
-			}
-			averageScores[i] = totalScore/100;
-		}
-		
 		for(int evolution = 0; evolution < 10; evolution++)
 		{
+			List<NeuralNetwork> newNeuralNetworks = new ArrayList<>();
+			for(int i = 0; i < 100; i++)
+				for(int j = 0; j < 100; j++)
+					newNeuralNetworks.addAll(EvolutionEngine.spawn(neuralNetworks[i], neuralNetworks[j]));
 			
+			List<Integer> newAverageScores = new ArrayList<>();
+			for(int i = 0; i < newNeuralNetworks.size(); i++)
+			{
+				int totalScore = 0;
+				for(int j = 0; j < 100; j++)
+				{
+					Game game = new Game();
+					while(!game.hasGameEnded())
+					{
+						double[] tmp = new double[game.getTiles().length];
+						for(int k = 0; k < game.getTiles().length; k++)
+							tmp[k] = game.getTiles()[k];
+						game.move(newNeuralNetworks.get(i).calculate(new Matrix(tmp, 16)));
+					}
+					totalScore += game.getScore();
+				}
+				newAverageScores.add(totalScore/100);
+			}
+			//TODO: extract best 100 nns
+			//TODO: add randomness
 		}
 	}
 	
-	public List<NeuralNetwork> spawn(NeuralNetwork parent1, NeuralNetwork parent2)
+	public static List<NeuralNetwork> spawn(NeuralNetwork parent1, NeuralNetwork parent2)
 	{
 		List<NeuralNetwork> res = new ArrayList<>();
 		res.add(NeuralNetwork.merge(parent1, parent2, 0));
