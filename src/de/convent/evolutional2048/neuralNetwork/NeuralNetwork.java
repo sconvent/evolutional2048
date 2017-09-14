@@ -18,6 +18,7 @@ public class NeuralNetwork implements Serializable
 	Matrix[] weights;
 	int[] layerSizes;
 	ActivationFunction activationFunction;
+	float averageScore;
 
 	public NeuralNetwork(int[] layerSizesInput)
 	{
@@ -34,15 +35,25 @@ public class NeuralNetwork implements Serializable
 		load(path);
 		activationFunction = new StepFunction();
 	}
-	
+
 	public int[] getLayerSizes()
 	{
 		return layerSizes;
 	}
-	
+
 	public Matrix[] getWeights()
 	{
 		return weights;
+	}
+
+	public float getAverageScore()
+	{
+		return averageScore;
+	}
+
+	public void setAverageScore(float averageScore)
+	{
+		this.averageScore = averageScore;
 	}
 
 	public Direction calculate(Matrix input)
@@ -110,7 +121,7 @@ public class NeuralNetwork implements Serializable
 			return;
 		}
 	}
-	
+
 	public void print()
 	{
 		DecimalFormat format = new DecimalFormat("#0.00");
@@ -127,7 +138,7 @@ public class NeuralNetwork implements Serializable
 			System.out.println("");
 		}
 	}
-	
+
 	public static NeuralNetwork merge(NeuralNetwork nn1, NeuralNetwork nn2, double factor)
 	{
 		NeuralNetwork res = new NeuralNetwork(nn1.getLayerSizes());
@@ -137,7 +148,8 @@ public class NeuralNetwork implements Serializable
 			{
 				for(int k = 0; k < res.getWeights().length; k++)
 				{
-					res.getWeights()[i].getArray()[j][k] = nn1.getWeights()[i].getArray()[j][k]*factor + nn2.getWeights()[i].getArray()[j][k]*(1-factor);
+					res.getWeights()[i].getArray()[j][k] = nn1.getWeights()[i].getArray()[j][k] * factor
+							+ nn2.getWeights()[i].getArray()[j][k] * (1 - factor);
 				}
 			}
 		}

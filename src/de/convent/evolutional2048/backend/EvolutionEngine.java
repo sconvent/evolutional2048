@@ -13,17 +13,16 @@ import de.convent.evolutional2048.neuralNetwork.NeuralNetwork;
 
 public class EvolutionEngine
 {
-	NeuralNetwork[] neuralNetworks;
-	int[] averageScores;
+	List<NeuralNetwork> neuralNetworks;
 
 	public EvolutionEngine()
 	{
-		neuralNetworks = new NeuralNetwork[100];
-		averageScores = new int[100];
+		neuralNetworks = new ArrayList<>();
 		for(int i = 0; i < 100; i++)
 		{
-			neuralNetworks[i] = new NeuralNetwork(new int[] { 16, 16, 4 });
-			averageScores[i] = 0;
+			NeuralNetwork newNeuralNetwork = new NeuralNetwork(new int[] { 16, 16, 4 });
+			newNeuralNetwork.setAverageScore(0);
+			neuralNetworks.add(newNeuralNetwork);
 		}
 	}
 
@@ -31,34 +30,33 @@ public class EvolutionEngine
 	{
 		for(int evolution = 0; evolution < 10; evolution++)
 		{
-			List<NeuralNetwork> newNeuralNetworks = new ArrayList<>();
 			for(int i = 0; i < 100; i++)
 				for(int j = 0; j < 100; j++)
-					newNeuralNetworks.addAll(EvolutionEngine.spawn(neuralNetworks[i], neuralNetworks[j]));
-			
+					neuralNetworks.addAll(EvolutionEngine.spawn(neuralNetworks.get(i), neuralNetworks.get(j)));
+
 			List<Integer> newAverageScores = new ArrayList<>();
-			for(int i = 0; i < newNeuralNetworks.size(); i++)
+			for(int i = 0; i < neuralNetworks.size(); i++)
 			{
 				int totalScore = 0;
 				for(int j = 0; j < 100; j++)
 				{
 					Game game = new Game();
-					while(!game.hasGameEnded())
+					while (!game.hasGameEnded())
 					{
 						double[] tmp = new double[game.getTiles().length];
 						for(int k = 0; k < game.getTiles().length; k++)
 							tmp[k] = game.getTiles()[k];
-						game.move(newNeuralNetworks.get(i).calculate(new Matrix(tmp, 16)));
+						game.move(neuralNetworks.get(i).calculate(new Matrix(tmp, 16)));
 					}
 					totalScore += game.getScore();
 				}
-				newAverageScores.add(totalScore/100);
+				newAverageScores.add(totalScore / 100);
 			}
-			//TODO: extract best 100 nns
-			//TODO: add randomness
+			// TODO: extract best 100 nns
+			// TODO: add randomness
 		}
 	}
-	
+
 	public static List<NeuralNetwork> spawn(NeuralNetwork parent1, NeuralNetwork parent2)
 	{
 		List<NeuralNetwork> res = new ArrayList<>();
@@ -99,7 +97,7 @@ public class EvolutionEngine
 		{
 			FileInputStream fileIn = new FileInputStream(path);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			neuralNetworks = (NeuralNetwork[]) in.readObject();
+			neuralNetworks = (List<NeuralNetwork>) in.readObject();
 			in.close();
 			fileIn.close();
 		}
@@ -118,13 +116,13 @@ public class EvolutionEngine
 	public void saveBest(String path)
 	{
 		int index = 0;
-		for(int i = 0; i < neuralNetworks.length; i++)
-			if(averageScores[i] > averageScores[index])
+		for(int i = 0; i < neuralNetworks.size(); i++)
+			if(neuralNetworks.get(i).getAverageScore() > neuralNetworks.get(index).getAverageScore())
 				index = i;
-		neuralNetworks[index].save(path);
+		neuralNetworks.get(index).save(path);
 	}
 
-	public NeuralNetwork[] getNeuralNetwork()
+	public List<NeuralNetwork> getNeuralNetwork()
 	{
 		return neuralNetworks;
 	}
