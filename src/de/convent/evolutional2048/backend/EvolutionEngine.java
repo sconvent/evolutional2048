@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import Jama.Matrix;
@@ -30,13 +31,15 @@ public class EvolutionEngine
 	{
 		for(int evolution = 0; evolution < 10; evolution++)
 		{
-			for(int i = 0; i < 100; i++)
-				for(int j = 0; j < 100; j++)
+			System.out.println("Generation" + evolution);
+			for(int i = 0; i < 10; i++)
+				for(int j = 0; j < 10; j++)
 					neuralNetworks.addAll(EvolutionEngine.spawn(neuralNetworks.get(i), neuralNetworks.get(j)));
+			System.out.println("Added all nns");
 
-			List<Integer> newAverageScores = new ArrayList<>();
 			for(int i = 0; i < neuralNetworks.size(); i++)
 			{
+				//System.out.println("Testing nn#" + i);
 				int totalScore = 0;
 				for(int j = 0; j < 100; j++)
 				{
@@ -50,9 +53,18 @@ public class EvolutionEngine
 					}
 					totalScore += game.getScore();
 				}
-				newAverageScores.add(totalScore / 100);
+				neuralNetworks.get(i).setAverageScore(totalScore / 100);
 			}
-			// TODO: extract best 100 nns
+			
+			java.util.Collections.sort(neuralNetworks, new Comparator<NeuralNetwork>()
+			{
+				@Override
+				public int compare(NeuralNetwork o1, NeuralNetwork o2)
+				{
+					return o1.getAverageScore() > o2.getAverageScore() ? 1 : 0;
+				}
+			});
+			neuralNetworks = neuralNetworks.subList(0, 100);
 			// TODO: add randomness
 		}
 	}
