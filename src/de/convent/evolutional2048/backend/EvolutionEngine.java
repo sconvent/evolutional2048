@@ -32,14 +32,18 @@ public class EvolutionEngine
 		for(int evolution = 0; evolution < 10; evolution++)
 		{
 			System.out.println("Generation" + evolution);
-			for(int i = 0; i < 10; i++)
+			//for(int i = 0; i < 10; i++)
+			//	for(int j = 0; j < 10; j++)
+			//		neuralNetworks.addAll(EvolutionEngine.spawn(neuralNetworks.get(i), neuralNetworks.get(j)));
+			for(int i = 0; i < 100; i++)
 				for(int j = 0; j < 10; j++)
-					neuralNetworks.addAll(EvolutionEngine.spawn(neuralNetworks.get(i), neuralNetworks.get(j)));
+					neuralNetworks.add(neuralNetworks.get(i).mutation());
+			
 			System.out.println("Added all nns");
 
 			for(int i = 0; i < neuralNetworks.size(); i++)
 			{
-				//System.out.println("Testing nn#" + i);
+				System.out.println("Testing nn#" + i);
 				int totalScore = 0;
 				for(int j = 0; j < 100; j++)
 				{

@@ -155,4 +155,28 @@ public class NeuralNetwork implements Serializable
 		}
 		return res;
 	}
+	
+	private double getRandom()
+	{
+		if(Math.random() < .1)
+			return Math.random()/5;
+		else
+			return 0;
+	}
+
+	public NeuralNetwork mutation()
+	{
+		NeuralNetwork res = new NeuralNetwork(getLayerSizes());
+		for(int i = 0; i < res.getWeights().length; i++)
+		{
+			for(int j = 0; j < res.getWeights().length; j++)
+			{
+				for(int k = 0; k < res.getWeights().length; k++)
+				{
+					res.getWeights()[i].getArray()[j][k] = getWeights()[i].getArray()[j][k] + getRandom();
+				}
+			}
+		}
+		return res;
+	}
 }
