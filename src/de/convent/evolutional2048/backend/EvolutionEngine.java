@@ -21,7 +21,7 @@ public class EvolutionEngine
 		neuralNetworks = new ArrayList<>();
 		for(int i = 0; i < 100; i++)
 		{
-			NeuralNetwork newNeuralNetwork = new NeuralNetwork(new int[] { 16, 16, 4 });
+			NeuralNetwork newNeuralNetwork = new NeuralNetwork(new int[] { 16, 16, 2 });
 			newNeuralNetwork.setAverageScore(0);
 			neuralNetworks.add(newNeuralNetwork);
 		}
@@ -43,7 +43,7 @@ public class EvolutionEngine
 
 			for(int i = 0; i < neuralNetworks.size(); i++)
 			{
-				System.out.println("Testing nn#" + i);
+				//System.out.println("Testing nn#" + i);
 				int totalScore = 0;
 				for(int j = 0; j < 100; j++)
 				{
@@ -60,6 +60,7 @@ public class EvolutionEngine
 				neuralNetworks.get(i).setAverageScore(totalScore / 100);
 			}
 			
+			System.out.println("AverageScore:" + neuralNetworks.get(0).getAverageScore());
 			java.util.Collections.sort(neuralNetworks, new Comparator<NeuralNetwork>()
 			{
 				@Override
@@ -69,7 +70,6 @@ public class EvolutionEngine
 				}
 			});
 			neuralNetworks = neuralNetworks.subList(0, 100);
-			// TODO: add randomness
 		}
 	}
 

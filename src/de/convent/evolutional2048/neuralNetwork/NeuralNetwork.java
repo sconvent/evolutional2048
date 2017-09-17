@@ -65,19 +65,12 @@ public class NeuralNetwork implements Serializable
 			current = weights[i].times(current);
 			current = activationFunction.function(current);
 		}
-		int maxIndex = 0;
-		if(current.getArray()[1][0] > current.getArray()[maxIndex][0])
-			maxIndex = 1;
-		if(current.getArray()[2][0] > current.getArray()[maxIndex][0])
-			maxIndex = 2;
-		if(current.getArray()[3][0] > current.getArray()[maxIndex][0])
-			maxIndex = 3;
 
-		if(maxIndex == 0)
+		if(current.getArray()[0][0] == 0 && current.getArray()[1][0] == 0)
 			return Direction.UP;
-		else if(maxIndex == 1)
+		else if(current.getArray()[0][0] == 0 && current.getArray()[1][0] != 0)
 			return Direction.RIGHT;
-		else if(maxIndex == 2)
+		else if(current.getArray()[0][0] != 0 && current.getArray()[1][0] == 0)
 			return Direction.DOWN;
 		else
 			return Direction.LEFT;
